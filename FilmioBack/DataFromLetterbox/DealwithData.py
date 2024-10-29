@@ -1,20 +1,16 @@
 import os
 import argparse
-from FilmioBack.DataFromLetterbox.DealWithZip import zip_file, unzip, copy_zip
+
+from FilmioBack.DataFromLetterbox.DataHandler import DataHandler
+from FilmioBack.DataFromLetterbox.ZipHandler import ZipHandler
 
 os.getcwd()
 directName = "Data"
+zip_handler = ZipHandler()
+data_handler = DataHandler()
 
 if os.path.exists(directName):
-    # Asks for the zip file
-    parser = argparse.ArgumentParser(description="Decompress a .zip file.")
-    parser.add_argument("file", type=zip_file, help=".zip path file")
-    args = parser.parse_args()
-    # Decompress the file in Temp
-    unzip(args.file)
-    # Copy zip to Backups
-    copy_zip(args.file)
-
+    zip_handler.process_zip()
 
 else:
     os.mkdir(directName)
@@ -22,3 +18,6 @@ else:
     os.mkdir(f"{directName}/Csv_Data")
     os.mkdir(f"{directName}/Logs")
     os.mkdir(f"{directName}/Temp")
+    zip_handler.process_zip()
+
+data_handler.process_data()

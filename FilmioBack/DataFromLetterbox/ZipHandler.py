@@ -1,0 +1,31 @@
+import argparse
+import shutil
+import zipfile
+
+
+class ZipHandler:
+    def __init__(self, temp_dir='FilmioData/Temp', backup_dir='FilmioData/Backup'):
+        self.temp_dir = temp_dir
+        self.backup_dir = backup_dir
+
+    def zip_file(self, path):
+        if not path.endswith(".zip"):
+            raise argparse.ArgumentTypeError("The file must end with .zip")
+        return path
+
+    def unzip(self, file):
+        with zipfile.ZipFile(file, 'r') as zip_ref:
+            zip_ref.extractall(self.temp_dir)
+
+    def copy_zip(self, file):
+        shutil.copy(file, self.backup_dir)
+
+    def process_zip(self):
+        parser = argparse.ArgumentParser(description="Decompress a .zip file.")
+        parser.add_argument("file", type=self.zip_file, help=".zip path file")
+        args = parser.parse_args()
+
+        # Decompress the file in Temp
+        self.unzip(args.file)
+        # Copy zip to Backups
+        self.copy_zip(args.file)
