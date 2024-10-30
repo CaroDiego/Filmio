@@ -1,11 +1,14 @@
 import logging
 import os
+from pathlib import Path
 
-os.mkdir("/Users/dicaf/Filmio/FilmioBack/Logs/") if not os.path.exists("/Users/dicaf/Filmio/FilmioBack/Logs/") else None
-LOG_PATH = '/Users/dicaf/Filmio/FilmioBack/Logs/app.log'
+log_dir = Path("/Users/dicaf/Filmio/FilmioBack/Logs")
+log_file = log_dir / "app.log"
 
-logging.basicConfig(level=logging.DEBUG, filename=LOG_PATH,
-                    format="%(asctime)s  - %(threadName)s - %(processName)s - %(levelname)s : %(message)s",
+log_dir.mkdir(parents=True, exist_ok=True)
+
+logging.basicConfig(level=logging.DEBUG, filename=log_file,
+                    format="%(asctime)s - %(name)s - %(threadName)s - %(processName)s - %(levelname)s : %(message)s",
                     filemode="a")
 
 lbox_logger = logging.getLogger("DataFromLetterbox")

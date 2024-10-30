@@ -28,3 +28,6 @@ else:
 print("Processing data")
 data_handler.process_data()
 print("End of script")
+
+#TODO Comparar el archivo nuevo con el mas reciente, para solo procesar los datos nuevos
+
