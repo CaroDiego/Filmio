@@ -14,22 +14,24 @@ class DataHandler:
             Path to the diary file.
         LIKES_PATH: str
             Path to the likes file.
-        CSV_DATA_PATH: str
+        RATED_PATH: str
             Path to the csv data directory.
         WATCHLIST_SOURCE_PATH: str
             Path to the watchlist file.
     """
     DIARY_PATH = 'C:/Users/dicaf/Filmio/FilmioBack/Data/Temp/diary.csv'
     LIKES_PATH = 'C:/Users/dicaf/Filmio/FilmioBack/Data/Temp/likes/films.csv'
-    CSV_DATA_PATH = 'C:/Users/dicaf/Filmio/FilmioBack/Data/Csv_Data'
+    RATED_PATH = 'C:/Users/dicaf/Filmio/FilmioBack/Data/Csv_Data/Rated'
+    WATCHLIST_PATH = 'C:/Users/dicaf/Filmio/FilmioBack/Data/Csv_Data/Watchlist'
     WATCHLIST_SOURCE_PATH = 'C:/Users/dicaf/Filmio/FilmioBack/Data/Temp/watchlist.csv'
 
     def __init__(self, diary_path=DIARY_PATH, likes_path=LIKES_PATH,
-                 csv_data_path=CSV_DATA_PATH, watchlist_source_path=WATCHLIST_SOURCE_PATH,
+                 rated_path=RATED_PATH, watchlist_path=WATCHLIST_PATH, watchlist_source_path=WATCHLIST_SOURCE_PATH,
                  current_date=None):
         self.diary_path = diary_path
         self.likes_path = likes_path
-        self.csv_data_path = csv_data_path
+        self.rated_path = rated_path
+        self.watchlist_path = watchlist_path
         self.watchlist_source_path = watchlist_source_path
         self.current_date = current_date or datetime.now().strftime('%Y-%m-%d')
         self.diary = pd.read_csv(self.diary_path) if os.path.exists(self.diary_path) else None
@@ -46,6 +48,8 @@ class DataHandler:
         else:
             lbox_logger.critical("Diary file not found")
             return pd.DataFrame()
+
+
 
     def get_liked(self, rated_films):
         """
@@ -66,6 +70,11 @@ class DataHandler:
             lbox_logger.critical("Likes file not found")
             return rated_films
 
+    def get_recent_files(self, directory):
+        files = [f for f  in os.listdir(directory)]
+        files.sort()
+
+
     def process_data(self):
         """
         Read the diary file, get the liked films and save the rated films and the watchlist.
@@ -81,10 +90,12 @@ class DataHandler:
         rated_films = self.get_liked(rated_films)
 
         # Save rated films
-        rated_films_path = os.path.join(self.csv_data_path, f"{self.current_date}_rated_films.csv")
-        lbox_logger.info(f"Saving rated films to {rated_films_path}")
+        rated_films_path = os.path.join(self.rated_path, f"{self.current_date}_rated_films.csv")
         rated_films.to_csv(rated_films_path, index=False)
+        lbox_logger.info(f"Saved rated films to {rated_films_path}")
 
         # Save watchlist
-        shutil.copy(self.watchlist_source_path, os.path.join(self.csv_data_path, "watchlist.csv"))
-        lbox_logger.info(f"Saving watchlist to {self.csv_data_path}")
+        watchlist_path = os.path.join(self.watchlist_path, f"{self.current_date}_watchlist.csv")
+        shutil.copy(self.watchlist_source_path, watchlist_path)
+        lbox_logger.info(f"Saved watchlist to {self.watchlist_path}")
+

@@ -21,6 +21,7 @@ else:
     os.mkdir(directName)
     os.mkdir(f"{directName}/Backup")
     os.mkdir(f"{directName}/Csv_Data")
+    os.mkdir(f"{directName}/Csv_Data/Rated")
     os.mkdir(f"{directName}/Temp")
     lbox_logger.info("Directories structure has been created" + directName)
     zip_handler.process_zip()
@@ -29,5 +30,7 @@ print("Processing data")
 data_handler.process_data()
 print("End of script")
 
-#TODO Comparar el archivo nuevo con el mas reciente, para solo procesar los datos nuevos
+#TODO Despues de hacer el request a la API de letterbox guardar en un archivo las peliculas
+#TODO Antes de hacer el request a la API de letterbox comparar el archivo con el archivo nuevo
+#TODO hacer el request a la API de letterbox solo de las peliculas nuevas
 
