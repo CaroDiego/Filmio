@@ -10,7 +10,7 @@ class ZipHandler:
     Class to handle zip files operations, such as validation, extraction and backups.
     Attributes:
         temp_dir: str
-            Temp directory to extract the zip file content..
+            Temp directory to extract the zip file content.
         backup_dir: str
             Backup directory to store the zip files
     """

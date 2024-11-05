@@ -12,3 +12,4 @@ logging.basicConfig(level=logging.DEBUG, filename=log_file,
                     filemode="a")
 
 lbox_logger = logging.getLogger("DataFromLetterbox")
+tmdb_logger = logging.getLogger("ConnectionToTMDB")
