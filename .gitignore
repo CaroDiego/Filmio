@@ -2,3 +2,4 @@
 /FilmioBack/Logs
 /FilmioBack/Resources
 /FilmioBack/ConnectionToTMDB/Key.py
+/FilmioBack/ConnectionToSupabase/key.py
