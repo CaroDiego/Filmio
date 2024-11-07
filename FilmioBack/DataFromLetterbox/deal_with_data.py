@@ -14,17 +14,21 @@ directName = "Data"
 zip_handler = ZipHandler()
 data_handler = DataHandler()
 
-if os.path.exists(directName):
-    lbox_logger.info("Directories structure already exists" + directName)
-    zip_handler.process_zip()
-else:
-    os.mkdir(directName)
-    os.mkdir(f"{directName}/Backup")
-    os.mkdir(f"{directName}/Csv_Data")
-    os.mkdir(f"{directName}/Csv_Data/Rated")
-    os.mkdir(f"{directName}/Temp")
-    lbox_logger.info("Directories structure has been created" + directName)
-    zip_handler.process_zip()
+directories = [
+    directName,
+    f"{directName}/Backup",
+    f"{directName}/Csv_Data",
+    f"{directName}/Csv_Data/Rated",
+    f"{directName}/Csv_Data/Watchlist",
+    f"{directName}/Temp"
+]
+
+for directory in directories:
+    if not os.path.exists(directory):
+        os.mkdir(directory)
+        lbox_logger.info(f"Directory created: {directory}")
+
+zip_handler.process_zip()
 
 print("Processing data")
 data_handler.process_data()
