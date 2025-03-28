@@ -14,7 +14,7 @@
   Supabase as a scalable SQL database in the cloud.
 
 - **Hosting:**  
-  Railway for easy and quick deployment of both the backend and frontend.
+  To define 
 
 ## 📝 Features
 
