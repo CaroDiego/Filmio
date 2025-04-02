@@ -7,6 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
 
+from utils.zip import zip_validator
+
 
 class Test(BaseModel):
     test: str
@@ -34,17 +36,13 @@ async def root():
 
 @app.post("/uploadfile")
 async def create_upload_file(file: UploadFile = File(...)):
-    try:
-        contents = await file.read()
-        zip_bytes = io.BytesIO(contents)
 
-        with zipfile.ZipFile(zip_bytes, "r") as z:
-            file_list = z.namelist()
-
-    except zipfile.BadZipFile:
-        raise HTTPException(status_code=400, detail="Invalid zip file")
+    is_valid = await zip_validator(file)
     
-    return {"file_name": file.filename, "file_list": file_list, "file_size": file.size}
+    if is_valid is not True:
+        raise HTTPException(status_code=400, detail=is_valid)
+    
+    return {"file_name": file.filename, "file_size": file.size}
 
 
 if __name__ == "__main__":
