@@ -6,6 +6,17 @@ import tempfile
 import pandas as pd
 
 async def zip_validator(file: bytes):
+    """
+    Validates if a given file is a valid ZIP archive.
+    Args:
+        file (bytes): The file content in bytes.
+    Returns:
+        bool: True if the file is a valid ZIP archive, otherwise an error message.
+    Raises: 
+        zipfile.BadZipFile: If the provided file is not a valid ZIP file.
+        zipfile.LargeZipFile: If the ZIP file is too large.
+        FileNotFoundError: If the file is not found.
+    """
     try:
 
         file_buffer = io.BytesIO(file)
