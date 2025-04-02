@@ -20,4 +20,3 @@ export const formatBytes = (bytes, decimals = 2) => {
   return size + " " + sizes[i]; // Concatenate the size with his unit
 };
 
-console.log(formatBytes(50802));
