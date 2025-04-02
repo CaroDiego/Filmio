@@ -33,9 +33,9 @@ function UploadFile() {
           </ul>
         )}
         {error && (
-          <ul>
+          <li>
             <strong>Error:</strong> {error}
-          </ul>
+          </li>
         )}
       </ul>
       <form onSubmit={handleSubmit}>
