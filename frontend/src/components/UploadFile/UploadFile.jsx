@@ -1,10 +1,18 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FileContext } from "../../context/file.contenxt";
 
 function UploadFile() {
-  const { uploadFile, files, fileName, fileSize, error } =
+  const { uploadFile, files, fileName, fileSize, error, getSimpleData, data } =
     useContext(FileContext);
   const [file, setFile] = useState();
+
+  useEffect(() => { 
+    if (data) {
+      data.forEach((item, i) => {
+        console.log(`Item ${i + 1}:`, item);
+      })
+    }
+  }, [data]);
 
   const handleChange = (e) => {
     setFile(e.target.files[0]);
@@ -12,7 +20,8 @@ function UploadFile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    uploadFile(file);
+    await uploadFile(file);
+    await getSimpleData();
   };
 
   const printFiles = () => {
