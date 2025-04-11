@@ -9,7 +9,6 @@ function FileProviderWrapper(props) {
   const [fileName, setFileName] = useState("");
   const [fileSize, setFileSize] = useState("");
   const [error, setError] = useState(null);
-  const [data, setData] = useState(null);
 
   const uploadFile = async (file) => {
     const formData = new FormData();
@@ -38,17 +37,6 @@ function FileProviderWrapper(props) {
   };
 
 
-  const getSimpleData = async () => {
-    try {
-      const response = await api.get("/simpledata");  
-      setData(response.data.data);
-      setError(null);
-    } catch (error) {
-      setError("Failed to fetch simple data");
-      console.error(error);
-    }
-   }
-
   return (
     <FileContext.Provider
       value={{
@@ -57,8 +45,6 @@ function FileProviderWrapper(props) {
         fileName,
         fileSize,
         error,
-        data,
-        getSimpleData,
       }}
     >
       {props.children}

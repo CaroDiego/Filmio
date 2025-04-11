@@ -1,6 +1,7 @@
 import os
 from fastapi import APIRouter, HTTPException
 import json
+import pandas as pd
 
 
 simple_data_router = APIRouter()
@@ -21,3 +22,29 @@ async def simple_data():
         raise HTTPException(status_code=500, detail="Invalid JSON format")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+        
+@simple_data_router.get("/simpledata/{stat}")
+async def simple_data_stat(stat: str):
+    file_path = "temp/letterboxd_data/final.json"
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+
+    try:
+        df = pd.read_json(file_path)
+        
+        if stat not in df.columns:
+            raise KeyError
+        
+        result = df[stat].value_counts().tolist()
+        object = df[stat].value_counts().index.tolist()
+        array = []
+        for i in range(len(object)):
+            item = {"key": object[i], "value": result[i]}
+            array.append(item)
+        
+        array.sort(key=lambda x: x["key"])
+        
+        return {"stat": stat, "data": array}
+    except KeyError:
+        raise HTTPException(status_code=404, detail=f"Stat '{stat}' not found")
