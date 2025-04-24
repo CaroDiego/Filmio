@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { DataContext } from "../../../context/data.context";
+import { RatingContext } from "../../../context/rating.context";
 import {
   BarChart,
   Bar,
@@ -10,10 +11,11 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-const BarChartComponent = () => {
-  const { data } = useContext(DataContext);
 
-  if (!data || data.length === 0) {
+const BarChartComponent = () => {
+  const { rating } = useContext(RatingContext);
+
+  if (!rating || rating.length === 0) {
     return <p>No data available for the chart.</p>;
   }
 
@@ -22,7 +24,7 @@ const BarChartComponent = () => {
       <BarChart
         width={500}
         height={300}
-        data={data}
+        data={rating}
         margin={{
           right: 30,
         }}
@@ -40,12 +42,12 @@ const BarChartComponent = () => {
 
 export default BarChartComponent;
 
-const CustomTooltip = ({ active, payload, label }) => {
+export const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div className="p-4 bg-slate-900 flex flex-col gap-4 rounded-md">
         <p className="text-sm text-blue-400">
-          Value: 
+          Value:
           <span className="ml-2"> {payload[0]?.value}</span>
         </p>
       </div>

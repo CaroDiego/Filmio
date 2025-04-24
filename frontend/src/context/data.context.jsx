@@ -18,24 +18,12 @@ function DataProviderWrapper(props) {
     }
   };
 
-  const getSimpleDataCategory = async (category) => {
-    try {
-      const response = await api.get(`/simpledata/${category}`);
-      setData(response.data.data);
-      setError(null);
-    } catch (error) {
-      setError("Failed to fetch simple data for category: " + category);
-      console.error(error);
-    }
-  };
-
   return (
     <DataContext.Provider
       value={{
         data,
         error,
         getSimpleData,
-        getSimpleDataCategory,
       }}
     >
       {props.children}
