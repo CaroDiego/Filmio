@@ -6,6 +6,7 @@ import YearBarVertical from "../charts/Year/YearBarVertical";
 import { YearContext } from "../../context/year.context";
 import { LikeContext } from "../../context/like.context";
 import LikesPieChart from "../charts/Likes/LikesPieChart";
+import Uploader from "./uploader";
 
 function UploadFile() {
   const { uploadFile, files, fileName, fileSize, error } =
@@ -16,7 +17,6 @@ function UploadFile() {
   const { getSimpleDataYear, year } = useContext(YearContext);
   const { getSimpleDataLike, like } = useContext(LikeContext);
   const [file, setFile] = useState();
-
 
   const handleChange = (e) => {
     setFile(e.target.files[0]);
@@ -32,6 +32,7 @@ function UploadFile() {
 
   return (
     <div>
+      <Uploader />
       <ul>
         {fileName && (
           <ul>
