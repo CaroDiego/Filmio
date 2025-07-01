@@ -3,6 +3,8 @@ from fastapi import APIRouter, HTTPException
 import json
 import pandas as pd
 
+from utils.file import validate_path
+
 
 simple_data_router = APIRouter()
 
@@ -10,8 +12,7 @@ simple_data_router = APIRouter()
 async def simple_data():
     file_path = "temp/letterboxd_data/final.json"
     
-    if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail="File not found")
+    validate_path(file_path)
 
     try:
         with open(file_path, "r") as file:
@@ -27,8 +28,7 @@ async def simple_data():
 async def simple_data_stat(stat: str):
     file_path = "temp/letterboxd_data/final.json"
     
-    if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail="File not found")
+    validate_path(file_path)
 
     try:
         df = pd.read_json(file_path)
