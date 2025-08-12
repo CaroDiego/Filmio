@@ -15,4 +15,10 @@ CREATE TABLE viewings (
     liked boolean DEFAULT false,
     created_at timestamptz DEFAULT now() NOT NULL
 );
+
+-- Constraint to prevent duplicate views
+ALTER TABLE viewings
+ADD CONSTRAINT unique_viewing_per_date
+UNIQUE (film_id, watched_date);
+
 ```
