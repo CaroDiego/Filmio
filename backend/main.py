@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from routes.simple_data import simple_data_router
 from routes.upload_file import upload_file_router
 from routes.test import test_router
+from routes.tmdb_data import tmdb_data_router
 
 app = FastAPI()
 
@@ -22,6 +23,7 @@ app.add_middleware(
 app.include_router(test_router)
 app.include_router(simple_data_router)
 app.include_router(upload_file_router)
+app.include_router(tmdb_data_router)
 
 
 if __name__ == "__main__":
