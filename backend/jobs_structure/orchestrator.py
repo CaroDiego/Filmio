@@ -1,9 +1,12 @@
+import math
+from jobs_structure.status.batch_status import BatchStatus
 from supabase_client.config.create_jobs_config import (
     create_if_not_exist_film_job_config,
 )
 from supabase_client.config.job_type import JobType
 from jobs_structure.status.job_status import JobStatus
 from supabase_client.db import get_supabase
+from datetime import datetime, timezone
 
 # TODO add error handling
 
@@ -46,7 +49,7 @@ def orchestrator(jobType):
     initial_batch_count = min(config["max_concurrency"], len(batches))
     for i in range(0, initial_batch_count):
         launch_batch(jobId, i, batches[i], config)
-        
+
     return "success"
 
 
@@ -107,5 +110,43 @@ def get_item_list(jobType):
     return item_list.data
 
 
-def launch_batch(jobId, batchIndex, items, config):
-    print("successsss" + str(batchIndex))
+def launch_batch(jobId, batchNumber, items, config):
+    supabase = get_supabase()
+    jobDoc = supabase.table("jobs").select("*").eq("id", jobId).execute()
+    jobData = jobDoc.data[0]
+
+    if jobData["is_killed"]:
+        print("[Orchestrator] Job was killed, won't trigger new batches")
+        supabase.table("jobs").update(
+            {
+                "status": JobStatus.KILLED.value,
+                "stopped_at": datetime.now(timezone.utc).isoformat(),
+            }
+        ).eq("id", jobId).execute()
+    else:
+        # Create Batch
+        newBatch = (
+            supabase.table("batches")
+            .insert(
+                {
+                    "job_id": jobId,
+                    "batch_number": batchNumber,
+                    "status": BatchStatus.RUNNING.value,
+                    "total_items": len(items),
+                }
+            )
+            .execute()
+        )
+
+        newBatchId = newBatch.data[0]["id"]
+
+        supabase.table("jobs").update(
+            {
+                "active_batches": jobData["active_batches"] + 1,
+            }
+        ).eq("id", jobId).execute()
+
+        totalBatches = math.ceil(len(items) / config["batch_size"])
+        processChildTask(jobId, newBatchId, batchNumber, totalBatches, items, config)
+
+        print(f"[Orchestrator] Launched batch {batchNumber + 1}/{totalBatches} for job {jobId}")
