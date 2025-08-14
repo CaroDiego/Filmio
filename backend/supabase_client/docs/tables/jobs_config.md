@@ -8,6 +8,6 @@ CREATE TABLE jobs_config (
     max_concurrency INT NOT NULL DEFAULT 4,
     max_retries INT NOT NULL DEFAULT 3,
     retry_delay_ms INT NOT NULL DEFAULT 5000,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at timestamptz DEFAULT now() NOT NULL,
 )
 ```

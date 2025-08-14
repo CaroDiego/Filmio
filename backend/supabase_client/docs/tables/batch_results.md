@@ -8,6 +8,6 @@ CREATE TABLE batch_results (
     status TEXT CHECK (status IN ('success', 'failed')) NOT NULL,
     error_message TEXT,
     processing_time_ms INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at timestamptz DEFAULT now() NOT NULL,
 )
 ```

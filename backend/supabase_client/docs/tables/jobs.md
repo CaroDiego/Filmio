@@ -14,7 +14,8 @@ CREATE TABLE jobs (
     successful_items INT DEFAULT 0,
     failed_items INT DEFAULT 0,
     processed_items INT DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    completed_at TIMESTAMP
+    created_at timestamptz DEFAULT now() NOT NULL,
+    completed_at timestamptz,
+    stopped_at timestamptz DEFAULT NULL
 )
 ```
