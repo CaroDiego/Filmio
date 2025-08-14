@@ -14,10 +14,11 @@ class Test(BaseModel):
 test_router = APIRouter()
 
 
-@test_router.get("/test")
+@test_router.post("/test")
 async def root():
-    items = orchestrator(JobType.TMDB_FILM_DATA.value)
-    return {"items": items}
+    item = orchestrator(JobType.TMDB_FILM_DATA.value)
+    return {"item": item}
+
 
 @test_router.get("/test2")
 async def root2():

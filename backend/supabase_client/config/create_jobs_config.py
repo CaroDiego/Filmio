@@ -2,7 +2,7 @@ from supabase_client.config.job_type import JobType
 from supabase_client.db import get_supabase
 
 
-def create_if_not_exist_film_job():
+def create_if_not_exist_film_job_config():
     supabase = get_supabase()
 
     existing = (
