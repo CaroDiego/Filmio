@@ -12,6 +12,11 @@ from datetime import datetime, timezone
 
 
 def orchestrator(jobType):
+    """Creates a new job of the specified type, divide items into batches and manage batch processing.
+
+    Args:
+        jobType (str): The type of job to create, typically an enum value from JobType.
+    """
     # Create job config if not exist
     create_if_not_exist_job_config(jobType)
     supabase = get_supabase()
@@ -49,8 +54,6 @@ def orchestrator(jobType):
     initial_batch_count = min(config["max_concurrency"], len(batches))
     for i in range(0, initial_batch_count):
         launch_batch(jobId, i, batches[i], config)
-
-    return "success"
 
 
 def create_if_not_exist_job_config(jobType):
@@ -138,7 +141,7 @@ def launch_batch(jobId, batchNumber, items, config):
             .execute()
         )
 
-        newBatchId = newBatch.data[0]["id"]
+        batchId = newBatch.data[0]["id"]
 
         supabase.table("jobs").update(
             {
@@ -147,6 +150,8 @@ def launch_batch(jobId, batchNumber, items, config):
         ).eq("id", jobId).execute()
 
         totalBatches = math.ceil(len(items) / config["batch_size"])
-        processChildTask(jobId, newBatchId, batchNumber, totalBatches, items, config)
+        processChildTask(jobId, batchId, batchNumber, totalBatches, items, config)
 
-        print(f"[Orchestrator] Launched batch {batchNumber + 1}/{totalBatches} for job {jobId}")
+        print(
+            f"[Orchestrator] Launched batch {batchNumber + 1}/{totalBatches} for job {jobId}"
+        )
